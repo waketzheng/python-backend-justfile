@@ -1,0 +1,31 @@
+# See https://pre-commit.com for more information
+# See https://pre-commit.com/hooks.html for more hooks
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    # To upgrade hooks run: `prek autoupdate`
+    rev: v6.0.0
+    hooks:
+      - id: check-added-large-files
+      - id: check-toml
+      - id: check-yaml
+      - id: end-of-file-fixer
+      - id: trailing-whitespace
+
+  - repo: https://github.com/crate-ci/typos
+    rev: v1.48.0
+    hooks:
+      - id: typos
+
+  - repo: local
+    hooks:
+      - id: local-just--fmt
+        name: auto reformat justfile
+        entry: just --fmt
+        language: system
+        pass_filenames: false
+
+      - id: local-just--evaluate
+        name: check justfile syntax
+        entry: just --evaluate
+        language: system
+        pass_filenames: false
