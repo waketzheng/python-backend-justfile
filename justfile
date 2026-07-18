@@ -8,8 +8,6 @@
 default:
     just --list
 
-set allow-duplicate-recipes
-
 # Use powershell for Windows so that 'Git Bash' and 'PyCharm Terminal' get the same result
 set windows-powershell
 

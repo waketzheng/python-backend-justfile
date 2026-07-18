@@ -5,6 +5,9 @@ General just recipes for python backend development
 - In your python backend project, create a justfile with following content:
 ```
 #!/usr/bin/env -S just --justfile
+set allow-duplicate-recipes
+
+import? '.common-just/justfile'
 
 system-info:
     @echo "This is an {{ arch() }} machine running on {{ os_family() }}"
