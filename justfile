@@ -159,7 +159,7 @@ _up *args:
 up *args: venv
     @just _up {{ args }}
     prek autoupdate
-    git submodule update --init --recursive --merge
+    git submodule update --init --recursive --merge --remote
 
 # Install project dependencies and remove those that not are not required
 [unix]
