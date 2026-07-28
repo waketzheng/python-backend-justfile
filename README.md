@@ -10,7 +10,7 @@ set allow-duplicate-recipes
 import? '.common-just/justfile'
 
 system-info:
-    @bash -c 'if [ -f ".common-just" ]; then just _just_up; else just init; fi'
+    @bash -c 'target=".common-just"; if [ -f "$target" ] || grep -q "$target" .git/config > /dev/null; then just _just_up; else just init; fi'
     @echo "This is an {{ arch() }} machine running on {{ os_family() }}"
     just --list
 
@@ -18,7 +18,7 @@ init:
   git submodule add https://github.com/waketzheng/python-backend-justfile .common-just
 
 _just_up:
-  git submodule update --init --recursive --merge --remote
+  git submodule update --init --recursive --merge --remote --force
 ```
 
 Run:
