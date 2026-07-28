@@ -45,8 +45,13 @@ venv *args:
 _venv313 *args:
     @just venv 3.13 {{ args }}
 
-_fast *args:
-    @just _uv_run fast {{ args }}
+[unix]
+_fast command *args:
+    @if test ! -e ~/.local/bin/fast; then just _uvx_py --from fast-dev-cli fast {{ command }} {{ args }}; else just _uv_run fast {{ command }} {{ args }}; fi
+
+[windows]
+_fast command *args:
+    if (-Not (Test-Path '~/.local/bin/fast.exe')) { just _uvx_py --from fast-dev-cli fast {{ command }}} {{ args }} } else { just _uv_run fast {{ command }} {{ args }} }
 
 # ---------- pypi mirror helpers ----------
 # Update the registry in `uv.lock` to use the mirror set by the config.
@@ -59,7 +64,7 @@ pypi *args:
 
 # ---------- dependency installation ----------
 _pdm_deps *args:
-    pdm install --frozen -G :all {{ args }}
+    just _pdm install --frozen -G :all {{ args }}
 
 _uv_sync *args:
     @just _fast deps --uv {{ args }}
@@ -197,7 +202,7 @@ _build *args:
     uv build --offline --clear {{ args }}
 
 build *args: install
-    pdm build {{ args }}
+    just _pdm build {{ args }}
 
 _test *args:
     @just _fast test {{ args }}
@@ -221,7 +226,7 @@ pipi *args: venv
 # ---------- project setup ----------
 # Install pre-commit hooks and project dependencies
 prepare:
-    prek install
+    @just _uvx_or_uv prek install
     @just install
 
 # ---------- versioning ----------
