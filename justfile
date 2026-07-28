@@ -117,7 +117,7 @@ _up *args:
 # Upgrade dependencies/pre-commit-hooks/.common-just
 up *args: venv
     @just _up {{ args }}
-    prek autoupdate
+    @just _uvx_or_uv prek autoupdate
     git submodule update --init --recursive --merge --remote
 
 # Install project dependencies and remove those that not are not required
