@@ -62,6 +62,14 @@ _pypi_reverse *args:
 pypi *args:
     @just _fast pypi --quiet {{ args }}
 
+_pypi_wrap command *args:
+    @just _pypi_reverse
+    @just {{ command }} {{ args }}
+    @just pypi
+
+_auto_wrap command *args:
+    @bash -c 'if grep -q "pypi.org" uv.lock 2 > /dev/null; then just _pypi_wrap {{ command }} {{ args }}; else just {{ command }} {{ args }}; fi'
+
 # ---------- dependency installation ----------
 _pdm_deps *args:
     just _pdm install --frozen -G :all {{ args }}
@@ -70,9 +78,7 @@ _uv_sync *args:
     @just _fast deps --uv {{ args }}
 
 _uv_deps *args:
-    @just _pypi_reverse
-    @just _uv_sync {{ args }}
-    @just pypi
+    @just _auto_wrap _uv_sync {{ args }}
 
 # Use uv to install dependencies
 install *args: venv
@@ -82,15 +88,11 @@ alias deps := install
 
 # ---------- lock ----------
 _uv_lock *args:
-    @just _pypi_reverse
-    @just _lock_and_update {{ args }}
-
-_lock_and_update *args:
     uv lock {{ args }}
     @just _uv_deps --frozen
 
 _lock *args: venv
-    @just _uv_lock {{ args }}
+    @just _auto_wrap _uv_lock {{ args }}
 
 # Run `uv lock` or `pdm lock` to update lock file
 lock *args: venv
@@ -98,9 +100,7 @@ lock *args: venv
 
 # ---------- add / remove ----------
 _pypi_wrap_uv *args:
-    @just _pypi_reverse
-    uv {{ args }}
-    @just pypi
+    @just _auto_wrap uv {{ args }}
 
 # Run `uv add` to update deps and keep register to be pypi.org
 add *args: venv
@@ -114,10 +114,16 @@ remove *args: venv
 _up *args:
     @just _uv_lock --upgrade {{ args }}
 
+_prek command *args:
+    @just _uvx_or_uv prek {{ command }} {{ args }}
+
+_pre_commit *args:
+    @just _prek run --all-files
+
 # Upgrade dependencies/pre-commit-hooks/.common-just
 up *args: venv
     @just _up {{ args }}
-    @just _uvx_or_uv prek autoupdate
+    @just _prek autoupdate
     git submodule update --init --recursive --merge --remote
 
 # Install project dependencies and remove those that not are not required
