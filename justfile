@@ -68,7 +68,7 @@ _pypi_wrap command *args:
     @just pypi
 
 _auto_wrap command *args:
-    @bash -c 'if grep -q "pypi.org" uv.lock 2 > /dev/null; then just _pypi_wrap {{ command }} {{ args }}; else just {{ command }} {{ args }}; fi'
+    @bash -c 'if grep -q "pypi.org" uv.lock 2> /dev/null; then just _pypi_wrap {{ command }} {{ args }}; else just {{ command }} {{ args }}; fi'
 
 # ---------- dependency installation ----------
 _pdm_deps *args:
