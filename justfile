@@ -122,9 +122,9 @@ _pre_commit *args:
 
 # Upgrade dependencies/pre-commit-hooks/.common-just
 up *args: venv
+    git submodule update --init --recursive --merge --remote
     @just _up {{ args }}
     @just _prek autoupdate
-    git submodule update --init --recursive --merge --remote
 
 # Install project dependencies and remove those that not are not required
 clear *args:
