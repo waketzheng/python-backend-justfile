@@ -5,6 +5,7 @@
 # NOTE: You can run the following command to install `just`:
 #   uv tool install rust-just
 
+# Check justfile syntax and list recipes
 default:
     @just _just_fmt
     @just _just_eval
@@ -112,7 +113,7 @@ remove *args: venv
 
 # ---------- upgrade ----------
 _up *args:
-    @just _uv_lock --upgrade {{ args }}
+    @just _lock --upgrade {{ args }}
 
 _prek command *args:
     @just _uvx_or_uv prek {{ command }} {{ args }}
@@ -151,6 +152,7 @@ _mypy *args:
 _pyright *args:
     @just _uvx_or_uv pyright {{ args }}
 
+# Check type hints by mypy
 mypy path=(SRC) *args:
     @just _mypy --python-executable={{ PY_EXEC }} {{ path }} {{ args }}
 
@@ -207,8 +209,9 @@ check *args: install
 _build *args:
     uv build --offline --clear {{ args }}
 
+# Run `uv build` to create sdist
 build *args: install
-    just _pdm build {{ args }}
+    uv build {{ args }}
 
 _test *args:
     @just _fast test {{ args }}
@@ -261,3 +264,28 @@ minor *args:
     @just _version minor --commit {{ args }}
     @just _publish
     @just _log
+
+_global_install package *args:
+    uv tool install {{ args }} {{ package }}
+
+[unix]
+_ensure_tool name package *args:
+    @if test ! -e ~/.local/bin/{{ name }}; then just _global_install {{ package }} {{ args }}; fi
+
+[windows]
+_ensure_tool name package *args:
+    @if (-Not (Test-Path '~/.local/bin/{{ name }}.exe')) { just _global_install {{ package }} {{ args }} }
+
+_ensure_it package *args:
+    @just _ensure_tool {{ package }} {{ package }} {{ args }}
+
+# Use `uv tool install` to prepare development tools (ruff/ty/pdm/...)
+tools *args:
+    @just _ensure_it ruff {{ args }}
+    @just _ensure_it ty {{ args }}
+    @just _ensure_it mypy {{ args }}
+    @just _ensure_it pyright {{ args }}
+    @just _ensure_it prek {{ args }}
+    @just _ensure_it pdm {{ args }}
+    @just _ensure_tool fast fast-dev-cli {{ args }}
+    @just _ensure_tool bumpversion bumpversion2 {{ args }}
