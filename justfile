@@ -180,7 +180,7 @@ _codeqc *args:
     @just right {{ args }}
 
 _lint *args:
-    @just _format --bandit {{ args }}
+    @just _format --auto-bandit {{ args }}
     @just _codeqc {{ args }}
 
 # Run `fast lint` to auto reformat code and check style
