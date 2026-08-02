@@ -161,8 +161,10 @@ _mypy310 path=(SRC) *args:
     uvx --python=3.10 --with-requirements=dev_requirements.txt mypy --cache-dir=.mypy310_cache {{ path }} {{ args }}
 
 # Run `pyright` to check type hints
-right path=(SRC) *args:
+pyright path=(SRC) *args:
     @just _pyright --pythonpath={{ PY_EXEC }} {{ path }} {{ args }}
+
+alias right := pyright
 
 _just_fmt:
     just --fmt
@@ -287,5 +289,6 @@ tools *args:
     @just _ensure_it pyright {{ args }}
     @just _ensure_it prek {{ args }}
     @just _ensure_it pdm {{ args }}
+    @just _ensure_it typos {{ args }}
     @just _ensure_tool fast fast-dev-cli {{ args }}
     @just _ensure_tool bumpversion bumpversion2 {{ args }}
