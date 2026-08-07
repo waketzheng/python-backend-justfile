@@ -146,15 +146,26 @@ _uvx_or_uv command *args:
 _uvx_or_uv command *args:
     if (-Not (Test-Path '~/.local/bin/{{ command }}')) { just _uvx_py {{ command }}} {{ args }} } else { just _uv_run {{ command }} {{ args }} }
 
+[unix]
+_with_env env_name env_value command *args:
+    {{ env_name }}='{{ env_value }}' just {{ command }} {{ args }}
+
+[windows]
+_with_env env_name env_value *args:
+    $env:{{ env_name }} = '{{ env_value }}'; just {{ command }}{{ args }}
+
 _mypy *args:
     @just _uvx_or_uv mypy {{ args }}
 
 _pyright *args:
     @just _uvx_or_uv pyright {{ args }}
 
+_mypy_exec *args:
+    @just _mypy --python-executable={{ PY_EXEC }} {{ args }}
+
 # Check type hints by mypy
 mypy path=(SRC) *args:
-    @just _mypy --python-executable={{ PY_EXEC }} {{ path }} {{ args }}
+    @just _mypy_exec {{ path }} {{ args }}
 
 _mypy310 path=(SRC) *args:
     uv export --python=3.10 --no-hashes --all-extras --all-groups --frozen -o dev_requirements.txt
