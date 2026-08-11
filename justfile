@@ -298,6 +298,25 @@ _ensure_tool name package *args:
 _ensure_it package *args:
     @just _ensure_tool {{ package }} {{ package }} {{ args }}
 
+# ---------- supervisor ----------
+_start *args:
+    sudo supervisorctl start {{ args }}
+
+# Start supervisor program
+start service=(PROJECT_NAME) *args:
+    @just _start {{ service }} {{ args }}
+
+_stop *args:
+    sudo supervisorctl stop {{ args }}
+
+# Stop supervisor program
+stop service=(PROJECT_NAME) *args:
+    sudo supervisorctl stop {{ service }} {{ args }}
+
+# Show supervisor services status
+status *args:
+    sudo supervisorctl status {{ args }}
+
 # Use `uv tool install` to prepare development tools (ruff/ty/pdm/...)
 tools *args:
     @just _ensure_it ruff {{ args }}
