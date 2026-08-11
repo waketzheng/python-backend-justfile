@@ -160,8 +160,14 @@ _mypy *args:
 _pyright *args:
     @just _uvx_or_uv pyright {{ args }}
 
-_mypy_exec *args:
+_mypyx *args:
     @just _mypy --python-executable={{ PY_EXEC }} {{ args }}
+
+_mypypath *args:
+    @just _with_env "MYPYPATH" {{ SRC }} _mypyx {{ args }}
+
+_mypy_exec path="." *args:
+    @just _mypyx {{ path }} {{ args }}
 
 # Check type hints by mypy
 mypy path=(SRC) *args:
