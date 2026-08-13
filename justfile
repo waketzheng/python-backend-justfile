@@ -15,8 +15,9 @@ default:
 set windows-powershell
 
 PROJECT_NAME := file_name(justfile_directory())
+PACKAGE := replace(PROJECT_NAME, "-", "_")
 PY_EXEC := if os_family() == "windows" { ".venv/Scripts/python.exe" } else { ".venv/bin/python" }
-SRC := if path_exists("src") == "true" { "src" } else { replace(PROJECT_NAME, "-", "_") }
+SRC := if path_exists("src") == "true" { "src" } else { PACKAGE }
 
 # ---------- virtualenv ----------
 [unix]
@@ -240,7 +241,7 @@ test *args: install
     @just _test {{ args }}
 
 # Run `fast dev` to start fastapi development mode
-dev *args: venv
+dev *args: install
     @just _fast dev {{ args }}
 
 # Install production dependencies
@@ -303,14 +304,21 @@ _start *args:
     sudo supervisorctl start {{ args }}
 
 # Start supervisor program
-start service=(PROJECT_NAME) *args:
+start service=(PACKAGE) *args:
     @just _start {{ service }} {{ args }}
+
+_restart *args:
+    sudo supervisorctl restart {{ args }}
+
+# Restart supervisor program
+restart service=(PACKAGE) *args:
+    @just _restart {{ service }} {{ args }}
 
 _stop *args:
     sudo supervisorctl stop {{ args }}
 
 # Stop supervisor program
-stop service=(PROJECT_NAME) *args:
+stop service=(PACKAGE) *args:
     sudo supervisorctl stop {{ service }} {{ args }}
 
 # Show supervisor services status
