@@ -53,7 +53,7 @@ _fast command *args:
 
 [windows]
 _fast command *args:
-    if (-Not (Test-Path '~/.local/bin/fast.exe')) { just _uvx_py --from fast-dev-cli fast {{ command }}} {{ args }} } else { just _uv_run fast {{ command }} {{ args }} }
+    if (-Not (Test-Path '~/.local/bin/fast.exe')) { just _uvx_py --from fast-dev-cli fast {{ command }} {{ args }} } else { just _uv_run fast {{ command }} {{ args }} }
 
 # ---------- pypi mirror helpers ----------
 # Update the registry in `uv.lock` to use the mirror set by the config.
