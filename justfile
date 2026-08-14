@@ -152,7 +152,7 @@ _with_env env_name env_value command *args:
     {{ env_name }}='{{ env_value }}' just {{ command }} {{ args }}
 
 [windows]
-_with_env env_name env_value *args:
+_with_env env_name env_value command *args:
     $env:{{ env_name }} = '{{ env_value }}'; just {{ command }}{{ args }}
 
 _mypy *args:
