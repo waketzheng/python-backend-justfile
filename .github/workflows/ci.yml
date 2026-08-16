@@ -38,7 +38,9 @@ jobs:
           ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
       - name: Clone tests by SSH
         run: |
-          git clone git@github.com:waketzheng/justfile-test tests
+          git clone git@github.com:waketzheng/justfile-test
+          mv justfile-test/tests .
+          rm -rf justfile-test
       - name: Setup Python
         id: setup-python
         uses: actions/setup-python@v7
