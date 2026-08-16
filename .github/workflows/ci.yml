@@ -30,11 +30,9 @@ jobs:
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           submodules: true
-      - name: Debug SSH
+      - name: Clone tests by SSH
         run: |
-          git remote -v
-          echo "${{ secrets.DEPLOY_KEY }}" | ssh-keygen -l -f /dev/stdin
-          ssh -T git@github.com || true
+          git clone git@github.com:waketzheng/justfile-test tests
       - name: Setup Python
         id: setup-python
         uses: actions/setup-python@v7
@@ -95,4 +93,12 @@ jobs:
           just init ssh
           just
           just venv
+          uvx pip-conf-mirror --uv qh
+          uv lock
+          python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
           just install
+          python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
+          uvx --from fast-dev-cli fast pypi --reverse --quiet
+          python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
+          just install
+          python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
