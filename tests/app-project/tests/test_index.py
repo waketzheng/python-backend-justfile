@@ -1,5 +1,11 @@
+from __future__ import annotations
+
+from typing import TYPE_CHECKING
+
 import pytest
-from asynctor.testing import AsyncClient
+
+if TYPE_CHECKING:
+    from asynctor.testing import AsyncClient
 
 
 @pytest.mark.anyio

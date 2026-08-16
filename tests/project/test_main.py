@@ -1,6 +1,19 @@
+from __future__ import annotations
+
+from contextlib import suppress
+from typing import TYPE_CHECKING
+
 import pytest
-from asynctor.testing import AsyncClient, anyio_backend_fixture, async_client_fixture
-from main import app
+
+with suppress(ImportError):
+    from asynctor.testing import anyio_backend_fixture, async_client_fixture
+    from asynctor.utils import ExtendSyspath
+
+with ExtendSyspath(__file__):
+    from main import app
+
+if TYPE_CHECKING:
+    from asynctor.testing import AsyncClient
 
 anyio_backend = anyio_backend_fixture()
 client = async_client_fixture(app)
