@@ -27,6 +27,8 @@ jobs:
         python-version: [3.12]
     steps:
       - uses: actions/checkout@v7
+        with:
+          ssh-key: ${{ secrets.DEPLOY_KEY }}
       - name: Setup Python
         id: setup-python
         uses: actions/setup-python@v7
@@ -59,7 +61,6 @@ jobs:
           just
       - name: Check justfile import
         run: |
-          git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "git@github.com:"
           cd tests/my-project
           cp ../../sample.justfile justfile
           just
