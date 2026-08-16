@@ -1,0 +1,90 @@
+# This workflow will install Python dependencies, run tests and lint with a single version of Python
+# For more information see: https://docs.github.com/en/actions/automating-builds-and-tests/building-and-testing-python
+
+name: ci
+
+on:
+  push:
+    branches: [ "main", "dev" ]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+  pull_request:
+    branches: [ "main" ]
+    paths-ignore:
+      - "docs/**"
+      - "*.md"
+
+permissions:
+  contents: read
+
+jobs:
+  lint:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+        python-version: [3.12]
+    steps:
+      - uses: actions/checkout@v7
+      - name: Setup Python
+        id: setup-python
+        uses: actions/setup-python@v7
+        with:
+          python-version: ${{ matrix.python-version }}
+          allow-prereleases: true
+      - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
+        with:
+          enable-cache: true
+          version: "0.12.1"
+          cache-dependency-path: |
+            pyproject.toml
+            uv.lock
+      - uses: astral-sh/ruff-action@v3
+      - uses: extractions/setup-just@v4  # Or: uv tool install rust-just
+      - name: Setup PDM by uv
+        run: |
+          uv tool install pdm --with pdm-plugin-i
+          pdm config check_update false
+          pdm config use_uv true
+      - name: Setup Prek by uv
+        run: |
+          uv tool install prek
+      - name: Check justfile syntax
+        run: |
+          mv justfile justfile.bak
+          cp sample.justfile justfile
+          just --fmt
+          just --evaluate
+          mv justfile.bak justfile
+          just
+      - name: Check justfile import
+        run: |
+          cd tests/my-project
+          cp ../../sample.justfile justfile
+          just
+          just venv
+          [[ -f README.md ]] || cp ../../README.md .
+          just install
+
+          cd ../app-project
+          cp ../../sample.justfile justfile
+          just init ssh
+          just
+          just venv
+          just install
+          just test
+
+          cd ../project
+          cp ../../sample.justfile justfile
+          just init ssh
+          just
+          just venv
+          just install
+
+          cd ../src-project
+          cp ../../sample.justfile justfile
+          just init ssh
+          just
+          just venv
+          just install
