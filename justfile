@@ -326,13 +326,13 @@ status *args:
     sudo supervisorctl status {{ args }}
 
 # Use `uv tool install` to prepare development tools (ruff/ty/pdm/...)
-tools *args:
-    @just _ensure_it ruff {{ args }}
-    @just _ensure_it ty {{ args }}
-    @just _ensure_it mypy {{ args }}
-    @just _ensure_it pyright {{ args }}
-    @just _ensure_it prek {{ args }}
-    @just _ensure_it pdm {{ args }}
-    @just _ensure_it typos {{ args }}
-    @just _ensure_tool fast fast-dev-cli {{ args }}
-    @just _ensure_tool bumpversion bumpversion2 {{ args }}
+tools python="3.14" *args:
+    @just _ensure_it ruff --python {{ python }} {{ args }}
+    @just _ensure_it ty --python {{ python }} {{ args }}
+    @just _ensure_it mypy --python {{ python }} {{ args }}
+    @just _ensure_it pyright --python {{ python }} {{ args }}
+    @just _ensure_it prek --python {{ python }} {{ args }}
+    @just _ensure_it pdm --python {{ python }} {{ args }}
+    @just _ensure_it typos --python {{ python }} {{ args }}
+    @just _ensure_tool fast fast-dev-cli --python {{ python }} {{ args }}
+    @just _ensure_tool bumpversion bumpversion2 --python {{ python }} {{ args }}
