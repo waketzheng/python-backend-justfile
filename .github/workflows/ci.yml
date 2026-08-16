@@ -29,6 +29,12 @@ jobs:
       - uses: actions/checkout@v7
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
+          submodules: true
+      - name: Debug SSH
+        run: |
+          git remote -v
+          echo "${{ secrets.DEPLOY_KEY }}" | ssh-keygen -l -f /dev/stdin
+          ssh -T git@github.com || true
       - name: Setup Python
         id: setup-python
         uses: actions/setup-python@v7
