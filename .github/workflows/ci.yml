@@ -59,6 +59,7 @@ jobs:
           just
       - name: Check justfile import
         run: |
+          git config --global url."https://${GITHUB_TOKEN}@github.com/".insteadOf "git@github.com:"
           cd tests/my-project
           cp ../../sample.justfile justfile
           just
@@ -76,7 +77,7 @@ jobs:
 
           cd ../project
           cp ../../sample.justfile justfile
-          just init ssh
+          just init
           just
           just venv
           just install
