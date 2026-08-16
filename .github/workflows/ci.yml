@@ -19,7 +19,7 @@ permissions:
   contents: read
 
 jobs:
-  lint:
+  tests:
     runs-on: ${{ matrix.os }}
     strategy:
       matrix:
@@ -40,7 +40,6 @@ jobs:
           cache-dependency-path: |
             pyproject.toml
             uv.lock
-      - uses: astral-sh/ruff-action@v3
       - uses: extractions/setup-just@v4  # Or: uv tool install rust-just
       - name: Setup PDM by uv
         run: |
@@ -81,6 +80,7 @@ jobs:
           just
           just venv
           just install
+          just test
 
           cd ../src-project
           cp ../../sample.justfile justfile
