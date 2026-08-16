@@ -35,7 +35,7 @@ jobs:
           mkdir -p ~/.ssh
           echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
-          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts
+          git config --global core.sshCommand "ssh -o StrictHostKeyChecking=no"
       - name: Clone tests by SSH
         run: |
           git clone git@github.com:waketzheng/justfile-test
