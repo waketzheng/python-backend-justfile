@@ -30,6 +30,12 @@ jobs:
         with:
           ssh-key: ${{ secrets.DEPLOY_KEY }}
           submodules: true
+      - name: Setup SSH key for manual git clone
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.DEPLOY_KEY }}" > ~/.ssh/id_rsa
+          chmod 600 ~/.ssh/id_rsa
+          ssh-keyscan -t rsa github.com >> ~/.ssh/known_hosts 2>/dev/null
       - name: Clone tests by SSH
         run: |
           git clone git@github.com:waketzheng/justfile-test tests
