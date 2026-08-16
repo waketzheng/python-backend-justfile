@@ -54,9 +54,9 @@ jobs:
         run: |
           mv justfile justfile.bak
           cp sample.justfile justfile
-          just --fmt
-          just --evaluate
+          prek run --all-files
           mv justfile.bak justfile
+          prek run --all-files
           just
       - name: Check justfile import
         run: |
