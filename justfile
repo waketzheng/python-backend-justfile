@@ -53,7 +53,7 @@ _fast command *args:
 
 [windows]
 _fast command *args:
-    if (-Not (Test-Path '~/.local/bin/fast.exe')) { just _uvx_py --from fast-dev-cli fast {{ command }}} {{ args }} } else { just _uv_run fast {{ command }} {{ args }} }
+    if (-Not (Test-Path '~/.local/bin/fast.exe')) { just _uvx_py --from fast-dev-cli fast {{ command }} {{ args }} } else { just _uv_run fast {{ command }} {{ args }} }
 
 # ---------- pypi mirror helpers ----------
 # Update the registry in `uv.lock` to use the mirror set by the config.
@@ -145,15 +145,15 @@ _uvx_or_uv command *args:
 
 [windows]
 _uvx_or_uv command *args:
-    if (-Not (Test-Path '~/.local/bin/{{ command }}')) { just _uvx_py {{ command }}} {{ args }} } else { just _uv_run {{ command }} {{ args }} }
+    if (-Not (Test-Path '~/.local/bin/{{ command }}')) { just _uvx_py {{ command }} {{ args }} } else { just _uv_run {{ command }} {{ args }} }
 
 [unix]
 _with_env env_name env_value command *args:
     {{ env_name }}='{{ env_value }}' just {{ command }} {{ args }}
 
 [windows]
-_with_env env_name env_value *args:
-    $env:{{ env_name }} = '{{ env_value }}'; just {{ command }}{{ args }}
+_with_env env_name env_value command *args:
+    $env:{{ env_name }} = '{{ env_value }}'; just {{ command }} {{ args }}
 
 _mypy *args:
     @just _uvx_or_uv mypy {{ args }}
