@@ -56,7 +56,9 @@ jobs:
           cache-dependency-path: |
             pyproject.toml
             uv.lock
-      - uses: extractions/setup-just@v4  # Or: uv tool install rust-just
+      - name: Setup just by uv
+        run: |
+          uv tool install rust-just
       - name: Setup PDM by uv
         run: |
           uv tool install pdm --with pdm-plugin-i
