@@ -42,7 +42,6 @@ jobs:
         run: |
           git clone git@github.com:waketzheng/justfile-test
           mv justfile-test/tests .
-          rm -rf justfile-test
       - name: Setup Python
         id: setup-python
         uses: actions/setup-python@v7
@@ -52,7 +51,7 @@ jobs:
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           enable-cache: true
-          version: "0.12.1"
+          version: "0.12.3"
           cache-dependency-path: |
             pyproject.toml
             uv.lock
@@ -83,6 +82,10 @@ jobs:
           just venv
           [[ -f README.md ]] || cp ../../README.md .
           just install
+          just add anyio
+          just add --dev pytest coverage
+          just remove --dev coverage
+          just up
 
           cd ../app-project
           cp ../../sample.justfile justfile
