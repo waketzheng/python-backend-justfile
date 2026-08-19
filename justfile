@@ -101,8 +101,11 @@ lock *args: venv
     @just _lock {{ args }}
 
 # ---------- add / remove ----------
+_uv command *args:
+    uv {{ command }} {{ args }}
+
 _pypi_wrap_uv *args:
-    @just _auto_wrap uv {{ args }}
+    @just _auto_wrap _uv {{ args }}
 
 # Run `uv add` to update deps and keep register to be pypi.org
 add *args: venv
@@ -242,6 +245,9 @@ test *args: install
 
 # Run `fast dev` to start fastapi development mode
 dev *args: install
+    @just _dev {{ args }}
+
+_dev *args:
     @just _fast dev {{ args }}
 
 # Install production dependencies
