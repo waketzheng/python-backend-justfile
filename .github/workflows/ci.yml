@@ -71,7 +71,7 @@ jobs:
           mv justfile justfile.bak
           cp sample.justfile justfile
           prek run --all-files
-          mv justfile.bak justfile
+          cp justfile.bak justfile
           prek run --all-files
           just
       - name: Check justfile import
