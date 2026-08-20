@@ -51,7 +51,6 @@ jobs:
       - uses: astral-sh/setup-uv@08807647e7069bb48b6ef5acd8ec9567f424441b # v8.1.0
         with:
           enable-cache: true
-          version: "0.12.3"
           cache-dependency-path: |
             pyproject.toml
             uv.lock
@@ -74,7 +73,8 @@ jobs:
           cp justfile.bak justfile
           prek run --all-files
           just
-      - name: Check justfile import
+
+      - name: Check justfile import my-project
         run: |
           cd tests/my-project
           cp ../../sample.justfile justfile
@@ -86,30 +86,39 @@ jobs:
           just add --dev pytest coverage
           just remove --dev coverage
           just up
+          cd -
 
-          cd ../app-project
+      - name: Check justfile import app-project
+        run: |
+          cd tests/app-project
           cp ../../sample.justfile justfile
           just init ssh
           just
           just venv
           just install
           just test
+          cd -
 
-          cd ../project
+      - name: Check justfile import project
+        run: |
+          cd tests/project
           cp ../../sample.justfile justfile
           just init
           just
           just venv
           just install
           just test
+          cd -
 
-          cd ../src-project
+      - name: Check justfile import src-project
+        run: |
+          cd tests/src-project
           cp ../../sample.justfile justfile
           just init ssh
           just
           just venv
           uvx pip-conf-mirror --uv qh
-          uv lock
+          just lock
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
           just install
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
