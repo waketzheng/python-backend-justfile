@@ -117,6 +117,7 @@ jobs:
           just init ssh
           just
           just venv
+          uv lock
           uvx pip-conf-mirror --uv qh
           just lock
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
@@ -124,5 +125,5 @@ jobs:
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
           uvx --from fast-dev-cli fast pypi --reverse --quiet
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
-          just install
+          just install --verbose
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
