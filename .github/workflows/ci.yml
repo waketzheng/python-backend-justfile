@@ -80,7 +80,7 @@ jobs:
           cp ../../sample.justfile justfile
           just
           just venv
-          [[ -f README.md ]] || cp ../../README.md .
+          python -c "import shutil;from pathlib import Path;f='README.md';Path(f).exists() or shutil.copy('../'+f, '.')"
           just install
           just add anyio
           just add --dev pytest coverage
