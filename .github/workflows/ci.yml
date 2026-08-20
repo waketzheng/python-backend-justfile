@@ -123,7 +123,11 @@ jobs:
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
           just install
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
+          just add anyio
+          python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
           uvx --from fast-dev-cli fast pypi --reverse --quiet
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
           just install --verbose
+          python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
+          just remove anyio
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
