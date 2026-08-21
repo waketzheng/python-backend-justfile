@@ -116,8 +116,7 @@ jobs:
           cp ../../sample.justfile justfile
           just init ssh
           just
-          just venv
-          uv lock
+          just add --dev typing-extensions
           uvx pip-conf-mirror --uv qh
           just lock
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' in s"
