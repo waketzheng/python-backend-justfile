@@ -19,7 +19,7 @@ _dirname := file_name(_workdir)
 PROJECT_NAME := if _dirname == "backend" { file_name(parent_directory(_workdir)) } else { _dirname }
 PACKAGE := replace(PROJECT_NAME, "-", "_")
 PY_EXEC := if os_family() == "windows" { ".venv/Scripts/python.exe" } else { ".venv/bin/python" }
-SRC := if path_exists("src") == "true" { "src" } else if path_exists("app") == "true" { "app" } else { PACKAGE }
+SRC := if path_exists("src") == "true" { "src" } else if path_exists("app") == "true" { "app" } else if path_exists(PACKAGE) == "true" { PACKAGE } else { "." }
 
 # ---------- virtualenv ----------
 [unix]
