@@ -95,7 +95,7 @@ jobs:
           just init ssh
           just
           just venv
-          just install
+          just deps
           just test
           cd -
 
@@ -106,7 +106,7 @@ jobs:
           just init
           just
           just venv
-          just install
+          just i
           just test
           cd -
 
@@ -130,3 +130,11 @@ jobs:
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
           just remove anyio
           python -c "from pathlib import Path;f=Path('uv.lock');s=f.read_text();assert 'pypi.org' not in s"
+
+      - name: Check justfile import fullstack-template
+        run: |
+          cd tests/fullstack-template/backend
+          cp ../../../sample.justfile justfile
+          just
+          just install
+          just mypy

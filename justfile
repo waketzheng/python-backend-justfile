@@ -89,6 +89,7 @@ install *args: venv
     @just _uv_deps {{ args }}
 
 alias deps := install
+alias i := install
 
 # ---------- lock ----------
 _uv_lock *args:
