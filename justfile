@@ -11,9 +11,6 @@ default:
     @just _just_eval
     just --list
 
-# Use powershell for Windows so that 'Git Bash' and 'PyCharm Terminal' get the same result
-set windows-powershell
-
 _workdir := justfile_directory()
 _dirname := file_name(_workdir)
 PROJECT_NAME := if _dirname == "backend" { file_name(parent_directory(_workdir)) } else { _dirname }
@@ -71,8 +68,13 @@ _pypi_wrap command *args:
     @just {{ command }} {{ args }}
     @just pypi
 
+[unix]
 _auto_wrap command *args:
     @bash -c 'if grep -q "pypi.org" uv.lock 2> /dev/null; then just _pypi_wrap {{ command }} {{ args }}; else just {{ command }} {{ args }}; fi'
+
+[windows]
+_auto_wrap command *args:
+    @if (Test-Path uv.lock -and (Select-String -Path uv.lock -Pattern "pypi.org" -Quiet)) { just _pypi_wrap {{ command }} {{ args }} } else { just {{ command }} {{ args }}}
 
 # ---------- dependency installation ----------
 _pdm_deps *args:
@@ -294,15 +296,15 @@ minor *args:
     @just _publish
     @just _log
 
-_global_install package *args:
+_global_install package="bumpversion2" *args:
     uv tool install {{ args }} {{ package }}
 
 [unix]
-_ensure_tool name package *args:
+_ensure_tool name="bumpversion" package="bumpversion2" *args:
     @if test ! -e ~/.local/bin/{{ name }}; then just _global_install {{ package }} {{ args }}; fi
 
 [windows]
-_ensure_tool name package *args:
+_ensure_tool name="bumpversion" package="bumpversion2" *args:
     @if (-Not (Test-Path '~/.local/bin/{{ name }}.exe')) { just _global_install {{ package }} {{ args }} }
 
 _ensure_it package *args:
@@ -328,7 +330,7 @@ _stop *args:
 
 # Stop supervisor program
 stop service=(PACKAGE) *args:
-    sudo supervisorctl stop {{ service }} {{ args }}
+    @just _stop {{ service }} {{ args }}
 
 # Show supervisor services status
 status *args:
@@ -336,6 +338,10 @@ status *args:
 
 # Use `uv tool install` to prepare development tools (ruff/ty/pdm/...)
 tools python="3.14" *args:
+    @just _normal_tools {{ python }} {{ args }}
+    @just _custom_tools {{ python }} {{ args }}
+
+_normal_tools python="3.14" *args:
     @just _ensure_it ruff --python {{ python }} {{ args }}
     @just _ensure_it ty --python {{ python }} {{ args }}
     @just _ensure_it mypy --python {{ python }} {{ args }}
@@ -343,5 +349,7 @@ tools python="3.14" *args:
     @just _ensure_it prek --python {{ python }} {{ args }}
     @just _ensure_it pdm --python {{ python }} {{ args }}
     @just _ensure_it typos --python {{ python }} {{ args }}
+
+_custom_tools python="3.14" *args:
     @just _ensure_tool fast fast-dev-cli --python {{ python }} {{ args }}
     @just _ensure_tool bumpversion bumpversion2 --python {{ python }} {{ args }}
