@@ -321,12 +321,18 @@ start service=(PACKAGE) *args:
 _restart *args:
     sudo supervisorctl restart {{ args }}
 
+_restartit section="api" *args:
+    @just _restart {{ PROJECT_NAME }}:{{ section }} {{ args }}
+
 # Restart supervisor program
 restart service=(PACKAGE) *args:
     @just _restart {{ service }} {{ args }}
 
 _stop *args:
     sudo supervisorctl stop {{ args }}
+
+_stopit section="api" *args:
+    @just _stop {{ PROJECT_NAME }}:{{ section }} {{ args }}
 
 # Stop supervisor program
 stop service=(PACKAGE) *args:
