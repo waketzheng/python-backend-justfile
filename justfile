@@ -134,7 +134,7 @@ _pre_commit *args:
 up *args: venv
     git submodule update --init --recursive --merge --remote
     @just _up {{ args }}
-    @just _prek autoupdate
+    @just _prek autoupdate --freeze
 
 # Install project dependencies and remove those that not are not required
 clear *args:

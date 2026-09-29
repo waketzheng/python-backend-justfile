@@ -24,4 +24,4 @@ _init scheme="http" *args:
     git submodule add {{ if scheme == "ssh" { "git@github.com:" } else { "https://github.com/" } }}waketzheng/python-backend-justfile .common-just
 
 _just_up *args:
-    git submodule update --init --merge --recursive --remote --force
+    git submodule update --init --merge --recursive --remote --force {{ args }}
