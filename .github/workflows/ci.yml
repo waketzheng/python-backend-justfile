@@ -92,7 +92,7 @@ jobs:
         run: |
           cd tests/app-project
           cp ../../sample.justfile justfile
-          just init ssh
+          just _init ssh
           just
           just venv
           just deps
@@ -103,7 +103,7 @@ jobs:
         run: |
           cd tests/project
           cp ../../sample.justfile justfile
-          just init
+          just _init
           just
           just venv
           just i
@@ -114,7 +114,7 @@ jobs:
         run: |
           cd tests/src-project
           cp ../../sample.justfile justfile
-          just init ssh
+          just _init ssh
           just
           just add --dev typing-extensions
           uvx pip-conf-mirror --uv qh
