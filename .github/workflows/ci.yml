@@ -135,6 +135,7 @@ jobs:
         run: |
           cd tests/fullstack-template/backend
           cp ../../../sample.justfile justfile
+          just _init
           just
           just install
           just mypy
