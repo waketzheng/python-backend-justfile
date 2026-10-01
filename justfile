@@ -74,7 +74,7 @@ _auto_wrap command *args:
 
 [windows]
 _auto_wrap command *args:
-    @if (Test-Path uv.lock -and (Select-String -Path uv.lock -Pattern "pypi.org" -Quiet)) { just _pypi_wrap {{ command }} {{ args }} } else { just {{ command }} {{ args }}}
+    @if ((Test-Path uv.lock) -and (Select-String -Path uv.lock -Pattern "pypi.org" -Quiet)) { just _pypi_wrap {{ command }} {{ args }} } else { just {{ command }} {{ args }}}
 
 # ---------- dependency installation ----------
 _pdm_deps *args:
